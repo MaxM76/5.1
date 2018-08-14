@@ -1,0 +1,13 @@
+{
+    "name": "maxim/maxim",
+    "description": "Training in Netology",
+    "authors": [
+        {
+            "name": "MaxM76",
+            "email": "m.v.markelov@mail.ru"
+        }
+    ],
+    "require": {
+        "yandex/geo": "^1.1"
+    }
+}
