@@ -25,6 +25,10 @@ if (isset($_GET['query'])) {
     print_r($response);
     echo '<br>**********************<br>';
 */
+    if (count($collection) > 0) {
+        $curLatitude = $collection[0]->getLatitude();
+        $curLongitude = $collection[0]->getLongitude();
+    }
     $_SESSION['response'] = $response;
 } else {
     $collection = [];
@@ -61,7 +65,7 @@ if (isset($_SESSION['response'])) {
 
         function init(){
             var myMap = new ymaps.Map("map", {
-                center: [55.76, 37.64],
+                center: [<?=$curLatitude?>, <?=$curLongitude?>],
                 zoom: 7
             });
 
@@ -74,7 +78,7 @@ if (count($collection) > 0) {
                 hintContent: '<?= $curAddress ?>',
                 balloonContent: '<?= $curAddress ?>'
             });
-
+            myMap.geoObjects.add(myPlacemark);
 <?php
     } else {
         foreach ($collection as $item) :
@@ -87,15 +91,10 @@ if (count($collection) > 0) {
                 hintContent: '<?= $address ?>',
                 balloonContent: '<?= $address ?>'
             });
-
+            myMap.geoObjects.add(myPlacemark);
 <?php
         endforeach;
     }
-?>
-
-            myMap.geoObjects.add(myPlacemark);
-
-<?php
 }
 ?>
         }
@@ -114,36 +113,33 @@ if (count($collection) > 0) {
 
     </div>
 
-    <div style="height: 400px">
-      <div id="map" style="width: 40%; height: 100%; display: inline-block">
-    </div>
+    <div id="list">
+      <h2>Результаты поиска для запроса "<?= $query ?>"</h2>
 
-      <div id="list" style="display: inline-block">
-        <h2>Результаты поиска для запроса "<?= $query ?>"</h2>
-
-        <ul>
+      <ul>
 
 <?php
     foreach ($collection as $item) : ?>
-          <li>
+        <li>
         <?php
         $address = $item->getAddress(); // вернет адрес
         $latitude = $item->getLatitude(); // широта
         $longitude = $item->getLongitude(); // долгота
         ?>
-            <a href="index.php?query=<?= $query ?>&item=<?=$i++?>">
-              <div>
-                <h2><?= $address ?></h2>
-                <p>[<?= $latitude ?>; <?= $longitude ?>]</p>
+          <a href="index.php?query=<?= $query ?>&item=<?=$i++?>">
+            <div>
+              <h2><?= $address ?></h2>
+              <p>[<?= $latitude ?>; <?= $longitude ?>]</p>
 
-              </div>
-            </a>
-          </li>
+            </div>
+          </a>
+        </li>
 <?php
     endforeach;
 ?>
-        </ul>
-      </div>
+      </ul>
     </div>
+
+    <div id="map" style="width: 600px; height: 400px"></div>
   </body>
 </html>
